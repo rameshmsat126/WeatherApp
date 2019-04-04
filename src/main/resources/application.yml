@@ -1,0 +1,10 @@
+info:
+  component: WeatherApp
+spring:
+  application:
+    name: WeatherApp
+  profiles:
+    include:
+      - weather
+server:
+  port: ${port:8080}

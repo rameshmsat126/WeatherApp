@@ -1,0 +1,3 @@
+weatherBit:
+  apiKey: b484ea08ddac4e0ebabee1bcbe9adf7f
+  url: https://api.weatherbit.io/v2.0/
