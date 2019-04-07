@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "weather")
+@ConfigurationProperties
 public class WeatherConfiguration {
 	private String apiKey;
     private String url;

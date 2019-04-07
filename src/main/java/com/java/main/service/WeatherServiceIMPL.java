@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.java.main.client.WeatherClient;
 import com.java.main.exceptions.InvalidPostalCodeException;
@@ -21,23 +21,18 @@ import com.java.main.utils.WeatherTemperature;
 @Service
 public class WeatherServiceIMPL implements WeatherServiceInterface{
 	 private static final Logger LOGGER = LoggerFactory.getLogger(WeatherServiceIMPL.class);
-	
-	 private WeatherClient weatherClient;
+	@Autowired
+	private WeatherClient weatherClient;
 	 
 	@Override
 	public Forecast getNextDayHourlyForecast(String postalCode) {
-
 		
-		if (StringUtils.isEmpty(postalCode)) {
-            LOGGER.error("Postal code was not provided");
-            throw new InvalidPostalCodeException("Postal code was not provided");
-        }
-        // GET forecast of next 48 hours to handle timezone offset of postal code
+		// GET forecast of next 48 hours to handle timezone offset of postal code
         Forecast forecast = weatherClient.getHourlyForecast(48, postalCode);
 
         if (forecast == null) {
-            LOGGER.error("Postal code is invalid: {}", postalCode);
-            throw new InvalidPostalCodeException(("Postal code is invalid"));
+            LOGGER.error("No weather data found or service is temporarily unavailable", postalCode);
+            throw new InvalidPostalCodeException(("No weather data found or service is temporarily unavailable"));
         }
 
         // Retrieve current local time based on postal code's timezone

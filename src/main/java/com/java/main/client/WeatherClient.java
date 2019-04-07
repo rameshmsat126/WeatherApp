@@ -13,40 +13,37 @@ import com.java.main.model.Forecast;
 public class WeatherClient {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WeatherClient.class);
-    private static final String hourlyForecastEndpoint = "forecast/hourly";
-    
-    @Autowired
-    private WeatherConfiguration weatherConfiguration;
-    private RestTemplate restTemplate;
+	private static final String hourlyForecastEndpoint = "forecast/hourly";
 
-    @Autowired
-    public WeatherClient(RestTemplate restTemplate, WeatherConfiguration weatherConfiguration) {
-        this.weatherConfiguration = weatherConfiguration;
-        this.restTemplate = restTemplate;
-    }
+	private WeatherConfiguration weatherConfiguration;
 
-    /**
-     * Retrieves the weather forecast for a given amount of hours from weather
-     * @param hours number of hours to retrieve weather forecast
-     * @param postalCode postal code aka zip code
-     * @return Forecast forecast containing weather of e
-     */
-    public Forecast getHourlyForecast(int hours, String postalCode) {
-        String url = String
-                .format("%s%s?key=%s&units=I&hours=%d&postal_code=%s", weatherConfiguration.getUrl(),
-                        hourlyForecastEndpoint, weatherConfiguration.getApiKey(), hours, postalCode);
-        LOGGER.info("urlWithQueryParams::"+url);
-        Forecast forecast;
+	private RestTemplate restTemplate;
 
-        try {
-            forecast = restTemplate.getForObject(url, Forecast.class);
-            LOGGER.info("getCoolestHourOfDay::"+forecast.getCoolestHourOfDay());
-            LOGGER.info("getWeatherList::"+forecast.getWeatherList());
-        } catch (Exception ex) {
-            LOGGER.error("Error occurred while making external call to weather");
-            throw ex;
-        }
+	@Autowired
+	public WeatherClient(RestTemplate restTemplate, WeatherConfiguration weatherConfiguration) {
+		this.weatherConfiguration = weatherConfiguration;
+		this.restTemplate = restTemplate;
+	}
 
-        return forecast;
-    }
+	/**
+	 * Retrieves the weather forecast for a given amount of hours from weather
+	 * 
+	 * @param hours      number of hours to retrieve weather forecast
+	 * @param postalCode postal code aka zip code
+	 * @return Forecast forecast containing weather of e
+	 */
+	public Forecast getHourlyForecast(int hours, String postalCode) {
+		String url = String.format("%s%s?key=%s&units=I&hours=%d&postal_code=%s", weatherConfiguration.getUrl(),
+				hourlyForecastEndpoint, weatherConfiguration.getApiKey(), hours, postalCode);
+		LOGGER.info("urlWithQueryParams::" + url);
+		Forecast forecast;
+
+		try {
+			forecast = restTemplate.getForObject(url, Forecast.class);
+		} catch (Exception ex) {
+			throw ex;
+		}
+
+		return forecast;
+	}
 }
